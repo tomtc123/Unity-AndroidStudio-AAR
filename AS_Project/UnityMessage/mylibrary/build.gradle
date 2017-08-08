@@ -31,3 +31,28 @@ dependencies {
     compile 'com.android.support:appcompat-v7:26.+'
     testCompile 'junit:junit:4.12'
 }
+
+//导出Manifest
+task exportManifest(type: Copy) {
+    from('src/main/AndroidManifest.xml')
+    into("../output")
+
+    println('===================Export AndroidManifest.xml finished.')
+}
+
+//导出aar
+task exportAar(type: Copy) {
+
+    from('build/outputs/aar/Unity_plugin-debug.aar')
+    into('../output')
+    rename { String fileName -> //在复制时重命名文件
+        fileName = "Unity_Plugin.aar" // 重命名
+    }
+    println('===================Export AAR finished.')
+}
+
+
+afterEvaluate {
+    exportManifest.execute()
+    exportAar.execute()
+}
