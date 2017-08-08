@@ -4,6 +4,8 @@ android {
     compileSdkVersion 26
     buildToolsVersion "26.0.1"
 
+    def API_TEST_HOST = "\"http://test.api.cn\""
+
     defaultConfig {
         minSdkVersion 16//需要和Unity3d设置一致
         targetSdkVersion 24//需要和Unity3d设置一致
@@ -12,15 +14,44 @@ android {
 
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
 
+        //manifest占位符
+        manifestPlaceholders = [
+                "MANIFEST_productFlavors" : "defaultConfig"
+        ]
+
+        //创建变量
+        //Java调用:BuildConfig.API_HOST
+        buildConfigField("String", "API_HOST", "${API_TEST_HOST}")
+
     }
+
+    //构建类型
     buildTypes {
         release {
-            minifyEnabled false
+            minifyEnabled false//是否混淆
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
+
+    //变体
+    productFlavors {
+        渠道1 {
+            manifestPlaceholders = [
+                    "MANIFEST_productFlavors" : "渠道1"
+            ]
+        }
+
+        渠道2 {
+            manifestPlaceholders = [
+                    "MANIFEST_productFlavors" : "渠道2"
+            ]
+        }
+
+    }
+
 }
 
+//依赖
 dependencies {
     //compile fileTree(dir: 'libs', include: ['*.jar']) 改成->
     //provided fileTree(dir: 'libs', include: ['*.jar']) 不打包进aar
@@ -51,7 +82,7 @@ task exportAar(type: Copy) {
     println('===================Export AAR finished.')
 }
 
-
+//
 afterEvaluate {
     exportManifest.execute()
     exportAar.execute()

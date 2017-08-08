@@ -22,7 +22,7 @@ public class MainActivity extends UnityPlayerActivity {
             }
         });
 
-        return "Android Dialog";
+        return BuildConfig.API_HOST;
     }
 
 
