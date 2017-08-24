@@ -55,7 +55,8 @@ android {
 dependencies {
     //compile fileTree(dir: 'libs', include: ['*.jar']) 改成->
     //provided fileTree(dir: 'libs', include: ['*.jar']) 不打包进aar
-    provided fileTree(dir: 'libs', include: ['*.jar'])
+    provided fileTree(dir: providedLibs, include: ['*.jar'])
+    compile fileTree(dir: compilelibs, include: ['*.jar'])
     androidTestCompile('com.android.support.test.espresso:espresso-core:2.2.2', {
         exclude group: 'com.android.support', module: 'support-annotations'
     })
@@ -63,27 +64,27 @@ dependencies {
     testCompile 'junit:junit:4.12'
 }
 
-//导出Manifest
-task exportManifest(type: Copy) {
-    from('src/main/AndroidManifest.xml')
-    into("../output")
-
-    println('===================Export AndroidManifest.xml finished.')
-}
-
-//导出aar
-task exportAar(type: Copy) {
-
-    from('build/outputs/aar/Unity_plugin-debug.aar')
-    into('../output')
-    rename { String fileName -> //在复制时重命名文件
-        fileName = "Unity_Plugin.aar" // 重命名
-    }
-    println('===================Export AAR finished.')
-}
-
+////导出Manifest
+//task exportManifest(type: Copy) {
+//    from('src/main/AndroidManifest.xml')
+//    into("../output")
 //
-afterEvaluate {
-    exportManifest.execute()
-    exportAar.execute()
-}
+//    println('===================Export AndroidManifest.xml finished.')
+//}
+//
+////导出aar
+//task exportAar(type: Copy) {
+//
+//    from('build/outputs/aar/Unity_plugin-debug.aar')
+//    into('../output')
+//    rename { String fileName -> //在复制时重命名文件
+//        fileName = "Unity_Plugin.aar" // 重命名
+//    }
+//    println('===================Export AAR finished.')
+//}
+//
+////
+//afterEvaluate {
+//    exportManifest.execute()
+//    exportAar.execute()
+//}

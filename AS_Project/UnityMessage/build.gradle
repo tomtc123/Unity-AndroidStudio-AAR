@@ -21,3 +21,36 @@ allprojects {
 task clean(type: Delete) {
     delete rootProject.buildDir
 }
+
+//ext property
+ext{
+    providedLibs = '../common/providedlibs/'//aar不包含
+    compilelibs = '../common/compilelibs/'//aar包含
+    outputPath = './outputs/'
+}
+
+//copy files to target path
+task copyFilesAfterBuild << {
+    def projects = project.getChildProjects()
+    projects.each {
+        item ->
+            def childProject = item.value
+            def projectName = childProject.name + '/'
+            def path = outputPath + projectName
+            project.delete(path)
+            copy{
+                from(projectName+'src/main') {
+                    include 'AndroidManifest.xml'
+                }
+                from(projectName+'build/outputs/aar') {
+                    include '*.aar'
+                }
+                println("======="+path)
+                into(path)
+            }
+    }
+}
+
+gradle.buildFinished {
+    copyFilesAfterBuild.execute()
+}
